@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeCheck AI - Oficjalna Gra</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+    <style>
+        :root {
+            --bg-color: #0d0d1a;
+            --container-bg: rgba(255, 255, 255, 0.02);
+            --text-color: #ffffff;
+            --text-muted: #b0b0d0;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --box-shadow-glow: rgba(255, 0, 128, 0.15);
+        }
+        .light-theme {
+            --bg-color: #f0f2f5;
+            --container-bg: #ffffff;
+            --text-color: #1a1a2e;
+            --text-muted: #4a4a6a;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --box-shadow-glow: rgba(0, 0, 0, 0.05);
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto 20px auto;
+            background: var(--container-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px var(--box-shadow-glow), 0 0 40px rgba(0, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        
+        /* --- NOWY, ULEPSZONY PASEK SOCIAL MEDIA Z NIKAMI --- */
+        .social-sidebar {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 1000;
+        }
+        .social-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        .social-item:hover {
+            transform: scale(1.05);
+        }
+        .social-link {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            font-size: 1.6rem;
+            transition: 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .light-theme .social-link {
+            background: #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            color: #1a1a2e;
+        }
+        .link-instagram:hover { background: #e1306c; color: white; box-shadow: 0 0 15px #e1306c; border-color: #e1306c; }
+        .link-tiktok:hover { background: #000000; color: white; box-shadow: 0 0 15px #00ffff; border-color: #00ffff; }
+        .link-facebook:hover { background: #1877f2; color: white; box-shadow: 0 0 15px #1877f2; border-color: #1877f2; }
+
+        .social-nick {
+            font-size: 0.85rem;
+            color: #00ffff;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            text-shadow: 0 0 5px #00ffff;
+        }
+        .light-theme .social-nick {
+            background: #ffffff;
+            color: #1a1a2e;
+            border-color: rgba(0,0,0,0.1);
+            text-shadow: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* --- IKONA USTAWIEŃ ⚙️ --- */
+        .settings-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 100;
+            user-select: none;
+            transition: transform 0.3s;
+        }
+        .settings-icon:hover { transform: rotate(45deg); }
+        
+        .settings-menu {
+            display: none;
+            position: absolute;
+            top: 55px;
+            right: 20px;
+            background: #1a1a3a;
+            border: 1px solid #ff007f;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            z-index: 101;
+            width: 220px;
+        }
+        .light-theme .settings-menu {
+            background: #ffffff;
+            border-color: #7f00ff;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .settings-option {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        .settings-option:last-child { margin-bottom: 0; }
+        .settings-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 5px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .light-theme .settings-btn { background: rgba(0,0,0,0.05); }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, #ff007f, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 0, 128, 0.4);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        /* --- LICZNIK I DIODA MUZYKI --- */
+        .counter-badge {
+            background: rgba(255, 0, 128, 0.15);
+            border: 1px solid #ff007f;
+            color: #ff007f;
+            padding: 6px 15px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+            transition: 0.3s;
+        }
+        .light-theme .counter-badge {
+            background: rgba(127, 0, 255, 0.08);
+            border-color: #7f00ff;
+            color: #7f00ff;
+        }
+        
+        .music-indicator {
+            font-size: 0.85rem;
+            color: #00ffff;
+            display: none;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        /* --- SYSTEM APALIKACJI PLIKÓW --- */
+        .upload-box {
+            border: 2px dashed #ff007f;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            cursor: pointer;
+            background: rgba(255, 0, 128, 0.03);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+        }
+        .upload-box:hover {
+            border-color: #00ffff;
+            background: rgba(0, 255, 255, 0.03);
+        }
+        #imagePreview {
+            display: none;
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 10px;
+            margin-top: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+        }
+
+        /* --- PRZYCISKI --- */
+        .combined-features {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .btn-combined {
+            width: 100%;
+            color: white;
+            border: none;
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-combined:hover { transform: translateY(-2px); }
+        .btn-podryw-rizz {
+            background: linear-gradient(90deg, #ff007f, #00ffff);
+            box-shadow: 0 4px 15px rgba(255, 0, 128, 0.3);
+        }
+        .btn-wymowka-wytlumaczenie {
+            background: linear-gradient(90deg, #ff9900, #e033ff);
+            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.2);
+        }
+        .old-features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid var(--border-color);
+        }
+        .feature-box {
+            border: 2px solid;
+            padding: 15px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            background: rgba(0,0,0,0.2);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .light-theme .feature-box { background: #ffffff; }
+        .feature-box:hover { transform: scale(1.03); }
+        .box-toxic { border-color: #ff3366; color: #ff3366; }
+        .light-theme .box-toxic { color: #cc0033; border-color: #cc0033; }
+        .box-nuda { border-color: #5c6b73; color: #ffffff; }
+        .light-theme .box-nuda { color: #5c6b73; }
+        .box-redflags { border-color: #cc3333; color: #cc3333; }
+        .box-atrakcyjnosc { border-color: #99cc33; color: #99cc33; }
+        
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            border-left: 4px solid #00ffff;
+            text-align: left;
+            line-height: 1.6;
+            font-size: 1.05rem;
+            color: #ffffff;
+        }
+        .light-theme #result { background: #eef2f7; color: #1a1a2e; }
+        
+        /* --- NOWY, PROFESJONALNY KONTENER NA REKLAMY GOOGLE ADSENSE --- */
+        .adsense-box {
+            max-width: 100%;
+            min-height: 120px;
+            margin: 30px auto 10px auto;
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px dashed var(--border-color);
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+        .light-theme .adsense-box { background: rgba(0,0,0,0.02); }
+
+        .footer-mail {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 768px) {
+            .social-sidebar {
+                position: static;
+                transform: none;
+                flex-direction: row;
+                justify-content: center;
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="social-sidebar">
+    <a href="https://www.instagram.com/vibe.checkai/" target="_blank" class="social-item">
+        <div class="social-link link-instagram"><i class="fab fa-instagram"></i></div>
+        <span class="social-nick">@vibe.checkai</span>
+    </a>
+    <a href="https://tiktok.com/@vibecheck" target="_blank" class="social-item">
+        <div class="social-link link-tiktok"><i class="fab fa-tiktok"></i></div>
+        <span class="social-nick">@vibecheck.ai</span>
+    </a>
+    <a href="https://www.facebook.com/profile.php?id=61590158560861" target="_blank" class="social-item">
+        <div class="social-link link-facebook"><i class="fab fa-facebook-f"></i></div>
+        <span class="social-nick">VibeCheck FB</span>
+    </a>
+</div>
+
+<audio id="localAudio" loop>
+    <source src="muzyka.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container" onclick="tryPlayMusic()">
+    <div class="settings-icon" onclick="toggleSettingsMenu(event)">⚙️</div>
+    <div class="settings-menu" id="settingsMenu" onclick="event.stopPropagation()">
+        <div class="settings-option">
+            <span>Motyw:</span>
+            <button class="settings-btn" id="themeBtn" onclick="toggleTheme()">Jasny</button>
+        </div>
+        <div class="settings-option">
+            <span>Muzyka:</span>
+            <button class="settings-btn" id="musicBtn" onclick="toggleMusic()">Wyłącz</button>
+        </div>
+        
+        <div class="settings-option" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+            <button class="settings-btn" style="width: 100%; background: linear-gradient(45deg, #ffd700, #ff8c00); color: #000; font-weight: bold; border: none; padding: 10px;" onclick="buyPremium()">👑 Kup Premium (5$/msc)</button>
+        </div>
+
+        <div style="border-top: 1px solid rgba(255,255,255,0.1); margin-top: 10px; padding-top: 10px; font-size: 0.75rem; color: #aaa;">
+            Kontakt: GenniallyApp@gmail.com
+        </div>
+    </div>
+
+    <h1>VibeCheck AI</h1>
+    <p>Wrzuć screena profilu lub rozmowy, a AI zrobi resztę! 🔥</p>
+    
+    <div class="counter-badge" id="counterDisplay">Pozostało: 15/15 darmowych analiz</div>
+    
+    <div class="music-indicator" id="musicIndicator">
+        🎵 Odtwarzanie: Montagem Ruganda
+    </div>
+    
+    <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+        <span id="uploadText" style="font-weight:bold; font-size: 1.1rem;">📸 Kliknij tutaj, aby dodać zdjęcie</span>
+        <img id="imagePreview" src="" alt="Podgląd zdjęcia">
+        <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFileUpload(event)">
+    </div>
+
+    <div class="combined-features">
+        <button class="btn-combined btn-podryw-rizz" onclick="runAnalysis('podryw')">
+            🔥 Wygeneruj podryw / ⚡ Rizz (Podryw)
+        </button>
+        <button class="btn-combined btn-wymowka-wytlumaczenie" onclick="runAnalysis('wymowka')">
+            🚫 Wygeneruj wymówkę / 🧠 Wytłumaczenie
+        </button>
+    </div>
+
+    <div class="old-features-grid">
+        <div class="feature-box box-toxic" onclick="runAnalysis('toxic')">⚠️ Ocena Toksyczności</div>
+        <div class="feature-box box-nuda" onclick="runAnalysis('nuda')">😴 Sprawdzacz Nudy</div>
+        <div class="feature-box box-redflags" onclick="runAnalysis('redflags')">🚩 Analiza Red Flagów</div>
+        <div class="feature-box box-atrakcyjnosc" onclick="runAnalysis('atrakcyjnosc')">⭐ Ocena Atrakcyjności</div>
+    </div>
+
+    <div id="result"></div>
+    
+    <div class="adsense-box">
+        <span style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; color:#555;">REKLAMA GOOGLE</span>
+        <ins class="adsbygoogle"
+             style="display:block; width:100%; min-height:90px;"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="XXXXXXXXXX"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <div class="footer-mail">Kontakt: GenniallyApp@gmail.com</div>
+</div>
+
+<script>
+    let audioInitialized = false;
+    let musicPlaying = false; 
+    let scanCount = 0;
+    const MAX_SCANS = 15;
+    let isPremium = false;
+
+    const audio = document.getElementById('localAudio');
+    const musicIndicator = document.getElementById('musicIndicator');
+
+    function tryPlayMusic() {
+        if (!audioInitialized) {
+            audioInitialized = true;
+            audio.play().then(() => {
+                musicPlaying = true;
+                document.getElementById('musicBtn').innerText = "Wyłącz";
+                musicIndicator.style.display = "block";
+            }).catch(e => {
+                console.log("Odtwarzanie wstrzymane przez system bezpieczeństwa przeglądarki.");
+            });
+        }
+    }
+
+    // Monitor błędów muzycznych
+    audio.onerror = function() {
+        if(audioInitialized) {
+            alert("⚠️ Błąd muzyki! \n\nUpewnij się, że plik w Twoim folderze został prawidłowo przemianowany na nazwę: muzyka");
+        }
+    };
+
+    function toggleSettingsMenu(event) {
+        event.stopPropagation();
+        const menu = document.getElementById('settingsMenu');
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    document.addEventListener('click', () => {
+        document.getElementById('settingsMenu').style.display = 'none';
+    });
+
+    function toggleMusic() {
+        tryPlayMusic();
+        const musicBtn = document.getElementById('musicBtn');
+        if (musicPlaying) {
+            audio.pause();
+            musicBtn.innerText = "Włącz";
+            musicPlaying = false;
+            musicIndicator.style.display = "none";
+        } else {
+            audio.play().catch(e => alert("Zmień nazwę pliku piosenki w folderze na: muzyka"));
+            musicBtn.innerText = "Wyłącz";
+            musicPlaying = true;
+            musicIndicator.style.display = "block";
+        }
+    }
+
+    function toggleTheme() {
+        const body = document.body;
+        const themeBtn = document.getElementById('themeBtn');
+        if (body.classList.contains('light-theme')) {
+            body.classList.remove('light-theme');
+            themeBtn.innerText = "Jasny";
+        } else {
+            body.classList.add('light-theme');
+            themeBtn.innerText = "Ciemny";
+        }
+    }
+
+    function handleFileUpload(event) {
+        tryPlayMusic();
+        const input = event.target;
+        const text = document.getElementById('uploadText');
+        const preview = document.getElementById('imagePreview');
+        
+        if (input.files && input.files[0]) {
+            text.innerText = "✅ Załadowano zdjęcie:";
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = "block";
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function buyPremium() {
+        alert("Pomyślnie zasymulowano zakup za 5$! 👑\nZyskujesz nielimitowany dostęp do wszystkich funkcji VibeCheck AI na 30 dni.");
+        isPremium = true;
+        const counterDisplay = document.getElementById('counterDisplay');
+        counterDisplay.innerText = "👑 Wersja Premium: Nielimitowane analizy";
+        counterDisplay.style.background = "rgba(255, 215, 0, 0.15)";
+        counterDisplay.style.color = "#ffd700";
+        counterDisplay.style.borderColor = "#ffd700";
+        document.getElementById('settingsMenu').style.display = 'none';
+    }
+
+    // SYSTEM ULTRA WYRAZISTYCH TEKSTÓW AI
+    function runAnalysis(type) {
+        tryPlayMusic();
+        const input = document.getElementById('fileInput');
+        
+        if (input.files.length === 0) {
+            alert("Zaraz, zaraz! Najpierw musisz dodać zdjęcie (screena profilu lub rozmowy), żeby sztuczna inteligencja miała co analizować! 📸");
+            return;
+        }
+
+        const resultDiv = document.getElementById('result');
+        const counterDisplay = document.getElementById('counterDisplay');
+        
+        if (!isPremium) {
+            if (scanCount >= MAX_SCANS) {
+                resultDiv.style.display = "block";
+                resultDiv.style.borderLeftColor = "#ff007f";
+                resultDiv.innerHTML = `
+                    <div style="text-align: center; padding: 15px; background: rgba(255,0,127,0.05); border-radius: 10px;">
+                        <h3 style="color: #ff007f; margin-top: 0; font-size: 1.4rem;">🔒 Limit darmowych analiz wyczerpany!</h3>
+                        <p style="color: #ffffff; font-size: 1rem;">Wykorzystałeś już wszystkie 15 darmowych prób. Odblokuj pełną wersję <strong>VibeCheck Premium</strong> bez limitów i zyskaj przewagę w pisaniu! 🔥</p>
+                        <button style="background: linear-gradient(45deg, #ffd700, #ff8c00); color: black; border: none; padding: 15px 35px; font-size: 1.1rem; font-weight: bold; border-radius: 50px; cursor: pointer; margin: 15px 0; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);" onclick="buyPremium(); document.getElementById('result').style.display='none';">
+                            👑 ODBLOKUJ PREMIUM (5$ / MIESIĄC)
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            scanCount++;
+            let remaining = MAX_SCANS - scanCount;
+            counterDisplay.innerText = `Pozostało: ${remaining}/${MAX_SCANS} darmowych analiz`;
+            if (remaining === 0) {
+                counterDisplay.style.borderColor = "#ff3366";
+                counterDisplay.style.color = "#ff3366";
+            }
+        }
+
+        resultDiv.style.display = "block";
+        let targetName = input.files[0].name;
+        let outputHTML = `<small style="color: #aa99ff;">⚡ Raport VibeCheck dla pliku: ${targetName}</small><br><br>`;
+
+        switch(type) {
+            case 'podryw':
+                resultDiv.style.borderLeftColor = "#ff007f";
+                outputHTML += `<strong style="color: #ff007f; font-size: 1.2rem;">🔥 [GENERATOR RIZZ]</strong><br><br>"Ej, moje AI właśnie zawiesiło licznik, bo Twój rizz na tym screenie wywalił skalę do góry. Szybki ruch: piszesz jej <em>'Moje AI wyliczyło, że nasz wspólny vibe to 99%. Kiedy sprawdzamy ten brakujący 1% przy dobrej kawie?'</em> – i czekasz na jej panikę."`;
+                break;
+            case 'wymowka':
+                resultDiv.style.borderLeftColor = "#ff9900";
+                outputHTML += `<strong style="color: #ff9900; font-size: 1.2rem;">🚫 [WYMÓWKA / KONTRA]</strong><br><br><strong>Rozszyfrowanie zachowania:</strong> Ta osoba celowo odpisuje po 4 godzinach jednym słowem, bo próbuje udawać potężnego biznesmena i sprawdzić, jak bardzo będziesz biegać wokół niej.<br><br><strong>Idealna cięta riposta:</strong> "Widzę, że odpisywanie zajmuje Ci tyle czasu, ile pisanie doktoratu z fizyki kwantowej. Odpuśćmy ten ból, pogadamy jak odzyskasz wolny czas między ratowaniem świata!"`;
+                break;
+            case 'toxic':
+                resultDiv.style.borderLeftColor = "#ff3366";
+                outputHTML += `<strong style="color: #ff3366; font-size: 1.2rem;">⚠️ [OCENA TOKSYCZNOŚCI: 94% - CZERWONA STREFA] 🚨</strong><br><br><strong>Analiza zachowań:</strong> Uciekaj stamtąd i nawet się nie oglądaj! Druga strona to podręcznikowy manipulant stosujący metodę 'ciepło-zimno'. Najpierw bombarduje Cię uwagą, a potem traktuje jak powietrze, żeby wzbudzić w Tobie poczucie winy. To nie jest relacja, to darmowy bilet na emocjonalny rollercoaster bez pasów bezpieczeństwa. Jesteś zbyt wielkim sigmą na takie gierki!`;
+                break;
+            case 'nuda':
+                resultDiv.style.borderLeftColor = "#5c6b73";
+                outputHTML += `<strong style="color: #5c6b73; font-size: 1.2rem;">😴 [WSKAŹNIK NUDY: 98% - CAŁKOWITY BRAK ENERGII]</strong><br><br><strong>Werdykt AI:</strong> Ta rozmowa ma mniejszą dynamikę niż obserwowanie schnącej farby na ścianie. Ty piszesz rozbudowane, ciekawe zdania, a w odpowiedzi dostajesz suche 'haha', 'nom', albo pojedynczą emotkę. Ta osoba ma charyzmę na poziomie ujemnym. Jeśli zaraz nie rzucisz tam jakiegoś totalnie abstrakcyjnego tematu, ta relacja umrze śmiercią naturalną w ciągu godziny.`;
+                break;
+            case 'redflags':
+                resultDiv.style.borderLeftColor = "#cc3333";
+                outputHTML += `<strong style="color: #cc3333; font-size: 1.2rem;">🚩 [ANALIZA RED FLAGÓW]</strong><br><br><strong>Wykryto krytyczne anomalie profilu:</strong><br><br>1️⃣ <em>Wieczne narzekanie:</em> Teksty typu 'wszyscy moi eks byli nienormalni' (spoiler: to ta osoba jest problemem).<br>2️⃣ <em>Zbieracz atencji:</em> Unikanie konkretnych odpowiedzi na temat spotkania na żywo.<br>3️⃣ <em>Egocentryzm:</em> Monolog o sobie, zero pytań skierowanych do Ciebie. <strong>Werdykt: Ewakuacja!</strong>`;
+                break;
+            case 'atrakcyjnosc':
+                resultDiv.style.borderLeftColor = "#99cc33";
+                outputHTML += `<strong style="color: #99cc33; font-size: 1.2rem;">⭐ [VIBE ATRAKCYJNOŚCI: 10/10 - ABSOLUTNA PETARDA] 🔥</strong><br><br><strong>Analiza wizualna profilu:</strong> Kadr, dopasowanie ubrań (stylówka) i kinowe światło – wszystko tutaj siedzi idealnie. Ten profil bije tak potężną aurą pewności siebie i magnetyzmu, że algorytmy aplikacji randkowych płaczą ze szczęścia. Wygląda to jak żywcem wyciągnięte z profesjonalnego profilu na Pintereście. Czysty, nowoczesny streetwear i pewny wzrok – obok tego nie da się przejść obojętnie.`;
+                break;
+        }
+        resultDiv.innerHTML = outputHTML + `<br><br><span style="font-size: 0.8rem; color: #ff007f; font-weight: bold;">(Wersja demonstracyjna - teksty zostaną w pełni zautomatyzowane po podpięciu Twojego klucza OpenAI API)</span>`;
+    }
+</script>
+</body>
+</html>
